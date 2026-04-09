@@ -8,11 +8,14 @@ import Navbar from '@/components/layout/Navbar';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import Card, { CardBody } from '@/components/ui/Card';
 import PostCard from '@/components/posts/PostCard';
+import { useTranslations } from 'next-intl';
 
 export default function PostHistoryPage() {
   const { user, loading: authLoading } = useAuth();
   const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined);
   const { data, loading, error, page, setPage } = usePostsList(statusFilter);
+  const t = useTranslations('posts');
+  const tc = useTranslations('common');
 
   if (authLoading) {
     return (
@@ -34,23 +37,23 @@ export default function PostHistoryPage() {
       <Navbar />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Post History</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{t('history')}</h1>
           <Link
             href="/posts/create"
             className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition"
           >
-            + Create Post
+            {t('createTitle')}
           </Link>
         </div>
 
         {/* Filters */}
         <div className="flex flex-wrap gap-2 mb-6">
           {[
-            { label: 'All', value: undefined },
-            { label: 'Draft', value: 'draft' },
-            { label: 'Scheduled', value: 'scheduled' },
-            { label: 'Published', value: 'published' },
-            { label: 'Failed', value: 'failed' },
+            { label: t('filterAll'), value: undefined },
+            { label: t('filterDraft'), value: 'draft' },
+            { label: t('filterScheduled'), value: 'scheduled' },
+            { label: t('filterPublished'), value: 'published' },
+            { label: t('filterFailed'), value: 'failed' },
           ].map((filter) => (
             <button
               key={filter.label}
@@ -92,17 +95,17 @@ export default function PostHistoryPage() {
                   disabled={page === 1}
                   className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium disabled:opacity-50 hover:bg-gray-50"
                 >
-                  Previous
+                  {tc('previous')}
                 </button>
                 <span className="px-4 py-2 text-sm text-gray-600">
-                  Page {page} of {totalPages}
+                  {tc('page', { current: page, total: totalPages })}
                 </span>
                 <button
                   onClick={() => setPage(Math.min(totalPages, page + 1))}
                   disabled={page === totalPages}
                   className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium disabled:opacity-50 hover:bg-gray-50"
                 >
-                  Next
+                  {tc('next')}
                 </button>
               </div>
             )}
@@ -112,14 +115,14 @@ export default function PostHistoryPage() {
             <CardBody className="text-center py-12">
               <p className="text-gray-500 mb-4">
                 {statusFilter
-                  ? `No ${statusFilter} posts found.`
-                  : 'No posts yet. Create your first post!'}
+                  ? t('noPostsFiltered', { status: statusFilter })
+                  : t('noPostsYet')}
               </p>
               <Link
                 href="/posts/create"
                 className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition"
               >
-                + Create Post
+                {t('createTitle')}
               </Link>
             </CardBody>
           </Card>
