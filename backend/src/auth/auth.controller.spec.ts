@@ -49,7 +49,11 @@ describe('AuthController', () => {
 
   describe('register', () => {
     it('should register a user and set cookie', async () => {
-      const dto = { name: 'Test User', email: 'test@example.com', password: 'password123' };
+      const dto = {
+        name: 'Test User',
+        email: 'test@example.com',
+        password: 'password123',
+      };
 
       const result = await controller.register(dto, mockResponse);
 

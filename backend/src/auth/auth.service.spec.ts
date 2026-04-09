@@ -108,9 +108,14 @@ describe('AuthService', () => {
       usersService.findByEmail!.mockResolvedValue(null);
 
       await expect(
-        service.login({ email: 'notfound@example.com', password: 'password123' }),
+        service.login({
+          email: 'notfound@example.com',
+          password: 'password123',
+        }),
       ).rejects.toThrow(UnauthorizedException);
-      expect(i18nService.t).toHaveBeenCalledWith('common.auth.invalidCredentials');
+      expect(i18nService.t).toHaveBeenCalledWith(
+        'common.auth.invalidCredentials',
+      );
     });
 
     it('should throw UnauthorizedException when password is invalid', async () => {
@@ -120,7 +125,9 @@ describe('AuthService', () => {
       await expect(
         service.login({ email: 'test@example.com', password: 'wrongpassword' }),
       ).rejects.toThrow(UnauthorizedException);
-      expect(i18nService.t).toHaveBeenCalledWith('common.auth.invalidCredentials');
+      expect(i18nService.t).toHaveBeenCalledWith(
+        'common.auth.invalidCredentials',
+      );
     });
   });
 });

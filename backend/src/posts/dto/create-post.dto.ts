@@ -69,7 +69,9 @@ export class CreatePostDto {
   @IsOptional()
   scheduledAt?: string;
 
-  @ApiPropertyOptional({ description: 'AI input parameters used to generate this post' })
+  @ApiPropertyOptional({
+    description: 'AI input parameters used to generate this post',
+  })
   @IsOptional()
   aiInput?: Record<string, any>;
 

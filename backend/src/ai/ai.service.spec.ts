@@ -124,7 +124,9 @@ describe('AiService', () => {
     it('should throw BadRequestException when AI output missing caption', async () => {
       const openaiMock = (service as any).openai;
       openaiMock.chat.completions.create.mockResolvedValue({
-        choices: [{ message: { content: JSON.stringify({ title: 'No caption' }) } }],
+        choices: [
+          { message: { content: JSON.stringify({ title: 'No caption' }) } },
+        ],
       });
 
       await expect(service.generatePost(mockInput)).rejects.toThrow(

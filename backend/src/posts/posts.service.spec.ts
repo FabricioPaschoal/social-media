@@ -9,7 +9,9 @@ import { SocialAccountsService } from '../social-accounts/social-accounts.servic
 describe('PostsService', () => {
   let service: PostsService;
   let postModel: any;
-  let socialAccountsService: Partial<Record<keyof SocialAccountsService, jest.Mock>>;
+  let socialAccountsService: Partial<
+    Record<keyof SocialAccountsService, jest.Mock>
+  >;
   let i18nService: Partial<Record<keyof I18nService, jest.Mock>>;
 
   const mockUserId = '507f1f77bcf86cd799439011';
@@ -189,7 +191,10 @@ describe('PostsService', () => {
 
       expect(postModel.findByIdAndUpdate).toHaveBeenCalledWith(
         mockPostId,
-        expect.objectContaining({ status: 'published', publishedAt: expect.any(Date) }),
+        expect.objectContaining({
+          status: 'published',
+          publishedAt: expect.any(Date),
+        }),
       );
     });
 
@@ -198,7 +203,10 @@ describe('PostsService', () => {
 
       expect(postModel.findByIdAndUpdate).toHaveBeenCalledWith(
         mockPostId,
-        expect.objectContaining({ status: 'failed', errorMessage: 'API error' }),
+        expect.objectContaining({
+          status: 'failed',
+          errorMessage: 'API error',
+        }),
       );
     });
   });

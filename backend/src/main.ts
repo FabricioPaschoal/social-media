@@ -28,7 +28,9 @@ async function bootstrap() {
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Social Media SaaS API')
-    .setDescription('API for AI-powered social media post generation and publishing')
+    .setDescription(
+      'API for AI-powered social media post generation and publishing',
+    )
     .setVersion('1.0')
     .addBearerAuth()
     .build();

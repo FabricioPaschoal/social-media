@@ -56,7 +56,9 @@ describe('UsersService', () => {
       });
 
       expect(result).toBeDefined();
-      expect(userModel.findOne).toHaveBeenCalledWith({ email: 'test@example.com' });
+      expect(userModel.findOne).toHaveBeenCalledWith({
+        email: 'test@example.com',
+      });
       expect(bcrypt.hash).toHaveBeenCalledWith('password123', 12);
     });
 
@@ -80,7 +82,9 @@ describe('UsersService', () => {
       const result = await service.findByEmail('test@example.com');
 
       expect(result).toEqual(mockUser);
-      expect(userModel.findOne).toHaveBeenCalledWith({ email: 'test@example.com' });
+      expect(userModel.findOne).toHaveBeenCalledWith({
+        email: 'test@example.com',
+      });
     });
 
     it('should return null when user not found', async () => {
@@ -115,7 +119,9 @@ describe('UsersService', () => {
       const updatedUser = { ...mockUser, name: 'Updated Name' };
       userModel.findByIdAndUpdate.mockResolvedValue(updatedUser);
 
-      const result = await service.update(mockUser._id, { name: 'Updated Name' });
+      const result = await service.update(mockUser._id, {
+        name: 'Updated Name',
+      });
 
       expect(result.name).toBe('Updated Name');
     });

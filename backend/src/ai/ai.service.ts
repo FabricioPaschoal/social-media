@@ -62,9 +62,7 @@ export class AiService {
         throw error;
       }
       this.logger.error(`AI generation failed: ${error.message}`);
-      throw new BadRequestException(
-        this.i18n.t('common.ai.apiError'),
-      );
+      throw new BadRequestException(this.i18n.t('common.ai.apiError'));
     }
   }
 

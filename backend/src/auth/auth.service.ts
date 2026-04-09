@@ -29,7 +29,9 @@ export class AuthService {
   async login(loginDto: LoginDto) {
     const user = await this.usersService.findByEmail(loginDto.email);
     if (!user) {
-      throw new UnauthorizedException(this.i18n.t('common.auth.invalidCredentials'));
+      throw new UnauthorizedException(
+        this.i18n.t('common.auth.invalidCredentials'),
+      );
     }
 
     const isPasswordValid = await this.usersService.validatePassword(
@@ -37,7 +39,9 @@ export class AuthService {
       user.password,
     );
     if (!isPasswordValid) {
-      throw new UnauthorizedException(this.i18n.t('common.auth.invalidCredentials'));
+      throw new UnauthorizedException(
+        this.i18n.t('common.auth.invalidCredentials'),
+      );
     }
 
     const token = this.generateToken(user._id.toString(), user.email);

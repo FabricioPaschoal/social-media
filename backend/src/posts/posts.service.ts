@@ -51,7 +51,9 @@ export class PostsService {
     if (createPostDto.publishMode === 'schedule' && createPostDto.scheduledAt) {
       const scheduledDate = new Date(createPostDto.scheduledAt);
       if (scheduledDate <= new Date()) {
-        throw new BadRequestException(this.i18n.t('common.posts.invalidStatus'));
+        throw new BadRequestException(
+          this.i18n.t('common.posts.invalidStatus'),
+        );
       }
       postData.status = 'scheduled';
       postData.scheduledAt = scheduledDate;
@@ -105,7 +107,10 @@ export class PostsService {
         _id: postId,
         userId: new Types.ObjectId(userId),
       })
-      .populate('socialAccountId', 'platform platformUsername pageName pageId igUserId');
+      .populate(
+        'socialAccountId',
+        'platform platformUsername pageName pageId igUserId',
+      );
 
     if (!post) {
       throw new NotFoundException(this.i18n.t('common.posts.notFound'));
@@ -141,11 +146,9 @@ export class PostsService {
       updateData.scheduledAt = new Date(updatePostDto.scheduledAt);
     }
 
-    const updated = await this.postModel.findByIdAndUpdate(
-      postId,
-      updateData,
-      { new: true },
-    );
+    const updated = await this.postModel.findByIdAndUpdate(postId, updateData, {
+      new: true,
+    });
     if (!updated) {
       throw new NotFoundException(this.i18n.t('common.posts.notFound'));
     }
@@ -171,17 +174,20 @@ export class PostsService {
 
     const account = post.socialAccountId as any;
     if (!account) {
-      await this.updatePostStatus(postId, 'failed', this.i18n.t('common.posts.socialAccountRequired'));
-      throw new BadRequestException(this.i18n.t('common.posts.socialAccountRequired'));
+      await this.updatePostStatus(
+        postId,
+        'failed',
+        this.i18n.t('common.posts.socialAccountRequired'),
+      );
+      throw new BadRequestException(
+        this.i18n.t('common.posts.socialAccountRequired'),
+      );
     }
 
     await this.postModel.findByIdAndUpdate(postId, { status: 'publishing' });
 
     try {
-      const fullCaption = this.buildFullCaption(
-        post.caption,
-        post.hashtags,
-      );
+      const fullCaption = this.buildFullCaption(post.caption, post.hashtags);
 
       let result: { id: string };
 
@@ -200,9 +206,9 @@ export class PostsService {
         (post.targetPlatform === 'both' && account.platform === 'instagram')
       ) {
         if (!post.imageUrl) {
-            throw new BadRequestException(
-              this.i18n.t('common.posts.captionRequired'),
-            );
+          throw new BadRequestException(
+            this.i18n.t('common.posts.captionRequired'),
+          );
         }
         result = await this.socialAccountsService.publishToInstagram(
           account._id.toString(),

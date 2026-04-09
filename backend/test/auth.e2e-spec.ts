@@ -123,13 +123,11 @@ describe('Auth (e2e)', () => {
       if (!mongoAvailable) return;
 
       // Create user for login tests
-      await request(app.getHttpServer())
-        .post('/api/auth/register')
-        .send({
-          name: 'Login Test User',
-          email: loginEmail,
-          password: loginPassword,
-        });
+      await request(app.getHttpServer()).post('/api/auth/register').send({
+        name: 'Login Test User',
+        email: loginEmail,
+        password: loginPassword,
+      });
     });
 
     it('should login with valid credentials', async () => {

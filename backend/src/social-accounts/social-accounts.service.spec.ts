@@ -33,7 +33,8 @@ describe('SocialAccountsService', () => {
         const config: Record<string, string> = {
           FACEBOOK_APP_ID: 'test-app-id',
           FACEBOOK_APP_SECRET: 'test-app-secret',
-          FACEBOOK_REDIRECT_URI: 'http://localhost:4000/api/social-accounts/facebook/callback',
+          FACEBOOK_REDIRECT_URI:
+            'http://localhost:4000/api/social-accounts/facebook/callback',
         };
         return config[key];
       }),
@@ -47,7 +48,10 @@ describe('SocialAccountsService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         SocialAccountsService,
-        { provide: getModelToken(SocialAccount.name), useValue: socialAccountModel },
+        {
+          provide: getModelToken(SocialAccount.name),
+          useValue: socialAccountModel,
+        },
         { provide: ConfigService, useValue: configService },
       ],
     }).compile();
