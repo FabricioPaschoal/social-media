@@ -15,7 +15,7 @@ export default getRequestConfig(async () => {
   if (cookieLocale && locales.includes(cookieLocale as Locale)) {
     return {
       locale: cookieLocale,
-      messages: (await import(`../../../messages/${cookieLocale}.json`)).default,
+      messages: (await import(`../../messages/${cookieLocale}.json`)).default,
     };
   }
 
@@ -26,7 +26,7 @@ export default getRequestConfig(async () => {
     if (preferred && locales.includes(preferred as Locale)) {
       return {
         locale: preferred,
-        messages: (await import(`../../../messages/${preferred}.json`)).default,
+        messages: (await import(`../../messages/${preferred}.json`)).default,
       };
     }
   }
@@ -34,6 +34,6 @@ export default getRequestConfig(async () => {
   // 3. Default
   return {
     locale: defaultLocale,
-    messages: (await import(`../../../messages/${defaultLocale}.json`)).default,
+    messages: (await import(`../../messages/${defaultLocale}.json`)).default,
   };
 });
