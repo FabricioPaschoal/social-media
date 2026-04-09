@@ -1,0 +1,59 @@
+{
+  "auth": {
+    "invalidCredentials": "Email ou senha inválidos",
+    "emailExists": "Email já cadastrado",
+    "registerSuccess": "Usuário registrado com sucesso",
+    "loginSuccess": "Login realizado com sucesso",
+    "logoutSuccess": "Logout realizado com sucesso",
+    "unauthorized": "Acesso não autorizado",
+    "tokenExpired": "Token expirado",
+    "tokenInvalid": "Token inválido"
+  },
+  "users": {
+    "notFound": "Usuário não encontrado",
+    "updateSuccess": "Usuário atualizado com sucesso"
+  },
+  "posts": {
+    "notFound": "Publicação não encontrada",
+    "createSuccess": "Publicação criada com sucesso",
+    "updateSuccess": "Publicação atualizada com sucesso",
+    "deleteSuccess": "Publicação excluída com sucesso",
+    "publishSuccess": "Publicação publicada com sucesso",
+    "publishFailed": "Falha ao publicar",
+    "invalidStatus": "Status de publicação inválido",
+    "captionRequired": "Legenda é obrigatória",
+    "socialAccountRequired": "Conta social é obrigatória"
+  },
+  "socialAccounts": {
+    "notFound": "Conta social não encontrada",
+    "connectSuccess": "Conta social conectada com sucesso",
+    "disconnectSuccess": "Conta social desconectada com sucesso",
+    "tokenExpired": "Token da conta social expirou. Por favor, reconecte.",
+    "invalidPermissions": "Permissões inválidas para esta conta social",
+    "rateLimited": "Limite de requisições excedido. Tente novamente mais tarde.",
+    "publishError": "Falha ao publicar no {platform}: {error}"
+  },
+  "ai": {
+    "generateSuccess": "Conteúdo de IA gerado com sucesso",
+    "generateFailed": "Falha ao gerar conteúdo de IA",
+    "invalidInput": "Entrada inválida para geração de IA",
+    "apiError": "Serviço de IA temporariamente indisponível"
+  },
+  "scheduler": {
+    "jobScheduled": "Publicação agendada com sucesso",
+    "jobFailed": "Tarefa agendada falhou: {error}",
+    "jobCompleted": "Publicação agendada publicada com sucesso"
+  },
+  "validation": {
+    "required": "{field} é obrigatório",
+    "invalidEmail": "Por favor, forneça um endereço de email válido",
+    "minLength": "{field} deve ter pelo menos {min} caracteres",
+    "maxLength": "{field} não deve exceder {max} caracteres"
+  },
+  "common": {
+    "serverError": "Erro interno do servidor",
+    "notFound": "Recurso não encontrado",
+    "badRequest": "Requisição inválida",
+    "forbidden": "Você não tem permissão para realizar esta ação"
+  }
+}
