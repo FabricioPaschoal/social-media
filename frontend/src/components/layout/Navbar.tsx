@@ -4,16 +4,19 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { useTranslations } from 'next-intl';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const pathname = usePathname();
+  const t = useTranslations('nav');
 
   const navLinks = [
-    { href: '/dashboard', label: 'Dashboard' },
-    { href: '/posts/create', label: 'Create Post' },
-    { href: '/posts/history', label: 'Post History' },
-    { href: '/social-accounts', label: 'Accounts' },
+    { href: '/dashboard', label: t('dashboard') },
+    { href: '/posts/create', label: t('createPost') },
+    { href: '/posts/history', label: t('postHistory') },
+    { href: '/social-accounts', label: t('accounts') },
   ];
 
   const handleLogout = async () => {
@@ -46,6 +49,7 @@ export default function Navbar() {
             </div>
           </div>
           <div className="flex items-center space-x-4">
+            <LanguageSwitcher />
             {user && (
               <>
                 <span className="text-sm text-gray-600">
@@ -55,7 +59,7 @@ export default function Navbar() {
                   onClick={handleLogout}
                   className="text-sm text-gray-500 hover:text-gray-700 font-medium"
                 >
-                  Logout
+                  {t('logout')}
                 </button>
               </>
             )}

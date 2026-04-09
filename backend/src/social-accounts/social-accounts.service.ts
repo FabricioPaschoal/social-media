@@ -95,9 +95,12 @@ export class SocialAccountsService {
     const expiresIn = longLivedResponse.data.expires_in || 5184000; // 60 days default
 
     // Get user info
-    const userResponse = await axios.get('https://graph.facebook.com/v19.0/me', {
-      params: { access_token: longLivedToken, fields: 'id,name' },
-    });
+    const userResponse = await axios.get(
+      'https://graph.facebook.com/v19.0/me',
+      {
+        params: { access_token: longLivedToken, fields: 'id,name' },
+      },
+    );
 
     // Get pages the user manages
     const pagesResponse = await axios.get(

@@ -1,5 +1,6 @@
 import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { I18nService } from 'nestjs-i18n';
 import OpenAI from 'openai';
 import { GeneratePostDto } from './dto/generate-post.dto';
 
@@ -18,7 +19,10 @@ export class AiService {
   private readonly logger = new Logger(AiService.name);
   private readonly openai: OpenAI;
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    private readonly i18n: I18nService,
+  ) {
     this.openai = new OpenAI({
       apiKey: this.configService.get<string>('OPENAI_API_KEY'),
     });
@@ -48,7 +52,7 @@ export class AiService {
 
       const content = completion.choices[0]?.message?.content;
       if (!content) {
-        throw new BadRequestException('AI returned empty response');
+        throw new BadRequestException(this.i18n.t('common.ai.generateFailed'));
       }
 
       const parsed = this.parseAndValidate(content);
@@ -58,9 +62,7 @@ export class AiService {
         throw error;
       }
       this.logger.error(`AI generation failed: ${error.message}`);
-      throw new BadRequestException(
-        `AI content generation failed: ${error.message}`,
-      );
+      throw new BadRequestException(this.i18n.t('common.ai.apiError'));
     }
   }
 
@@ -99,11 +101,11 @@ Hashtags should be without the # symbol.`;
     try {
       parsed = JSON.parse(content);
     } catch {
-      throw new BadRequestException('AI returned invalid JSON');
+      throw new BadRequestException(this.i18n.t('common.ai.invalidInput'));
     }
 
     if (!parsed.caption || typeof parsed.caption !== 'string') {
-      throw new BadRequestException('AI output missing valid caption');
+      throw new BadRequestException(this.i18n.t('common.ai.invalidInput'));
     }
 
     return {

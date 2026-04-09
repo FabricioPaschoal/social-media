@@ -45,4 +45,7 @@ export class SocialAccount {
 export const SocialAccountSchema = SchemaFactory.createForClass(SocialAccount);
 
 SocialAccountSchema.index({ userId: 1, platform: 1 });
-SocialAccountSchema.index({ userId: 1, pageId: 1 }, { unique: true, sparse: true });
+SocialAccountSchema.index(
+  { userId: 1, pageId: 1 },
+  { unique: true, sparse: true },
+);

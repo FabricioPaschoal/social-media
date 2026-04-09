@@ -1,0 +1,59 @@
+{
+  "auth": {
+    "invalidCredentials": "Invalid email or password",
+    "emailExists": "Email already registered",
+    "registerSuccess": "User registered successfully",
+    "loginSuccess": "Login successful",
+    "logoutSuccess": "Logout successful",
+    "unauthorized": "Unauthorized access",
+    "tokenExpired": "Token has expired",
+    "tokenInvalid": "Invalid token"
+  },
+  "users": {
+    "notFound": "User not found",
+    "updateSuccess": "User updated successfully"
+  },
+  "posts": {
+    "notFound": "Post not found",
+    "createSuccess": "Post created successfully",
+    "updateSuccess": "Post updated successfully",
+    "deleteSuccess": "Post deleted successfully",
+    "publishSuccess": "Post published successfully",
+    "publishFailed": "Failed to publish post",
+    "invalidStatus": "Invalid post status",
+    "captionRequired": "Caption is required",
+    "socialAccountRequired": "Social account is required"
+  },
+  "socialAccounts": {
+    "notFound": "Social account not found",
+    "connectSuccess": "Social account connected successfully",
+    "disconnectSuccess": "Social account disconnected successfully",
+    "tokenExpired": "Social account token has expired. Please reconnect.",
+    "invalidPermissions": "Invalid permissions for this social account",
+    "rateLimited": "Rate limit exceeded. Please try again later.",
+    "publishError": "Failed to publish to {platform}: {error}"
+  },
+  "ai": {
+    "generateSuccess": "AI content generated successfully",
+    "generateFailed": "Failed to generate AI content",
+    "invalidInput": "Invalid input for AI generation",
+    "apiError": "AI service is temporarily unavailable"
+  },
+  "scheduler": {
+    "jobScheduled": "Post scheduled successfully",
+    "jobFailed": "Scheduled job failed: {error}",
+    "jobCompleted": "Scheduled post published successfully"
+  },
+  "validation": {
+    "required": "{field} is required",
+    "invalidEmail": "Please provide a valid email address",
+    "minLength": "{field} must be at least {min} characters",
+    "maxLength": "{field} must not exceed {max} characters"
+  },
+  "common": {
+    "serverError": "Internal server error",
+    "notFound": "Resource not found",
+    "badRequest": "Bad request",
+    "forbidden": "You do not have permission to perform this action"
+  }
+}

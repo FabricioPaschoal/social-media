@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import AuthLayout from '@/components/layout/AuthLayout';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 
 export default function SignupPage() {
   const [name, setName] = useState('');
@@ -15,20 +16,21 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const router = useRouter();
+  const t = useTranslations('auth');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
+      toast.error(t('passwordsMismatch'));
       return;
     }
     setLoading(true);
     try {
       await register(name, email, password);
-      toast.success('Account created successfully');
+      toast.success(t('registerSuccess'));
       router.push('/dashboard');
     } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Registration failed');
+      toast.error(err.response?.data?.message || t('registerFailed'));
     } finally {
       setLoading(false);
     }
@@ -36,11 +38,11 @@ export default function SignupPage() {
 
   return (
     <AuthLayout>
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Create Account</h2>
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('signUp')}</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-            Full Name
+            {t('fullName')}
           </label>
           <input
             id="name"
@@ -49,12 +51,12 @@ export default function SignupPage() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition"
-            placeholder="John Doe"
+            placeholder={t('fullNamePlaceholder')}
           />
         </div>
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-            Email
+            {t('email')}
           </label>
           <input
             id="email"
@@ -63,12 +65,12 @@ export default function SignupPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition"
-            placeholder="you@example.com"
+            placeholder={t('emailPlaceholder')}
           />
         </div>
         <div>
           <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-            Password
+            {t('password')}
           </label>
           <input
             id="password"
@@ -78,12 +80,12 @@ export default function SignupPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition"
-            placeholder="Min. 6 characters"
+            placeholder={t('minPassword')}
           />
         </div>
         <div>
           <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-            Confirm Password
+            {t('confirmPassword')}
           </label>
           <input
             id="confirmPassword"
@@ -92,7 +94,7 @@ export default function SignupPage() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition"
-            placeholder="Repeat your password"
+            placeholder={t('confirmPasswordPlaceholder')}
           />
         </div>
         <button
@@ -100,13 +102,13 @@ export default function SignupPage() {
           disabled={loading}
           className="w-full bg-primary-600 text-white py-2.5 rounded-lg font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
         >
-          {loading ? 'Creating account...' : 'Create Account'}
+          {loading ? t('creatingAccount') : t('signUp')}
         </button>
       </form>
       <p className="mt-6 text-center text-sm text-gray-600">
-        Already have an account?{' '}
+        {t('hasAccount')}{' '}
         <Link href="/auth/login" className="text-primary-600 hover:text-primary-700 font-medium">
-          Sign in
+          {t('signInLink')}
         </Link>
       </p>
     </AuthLayout>
