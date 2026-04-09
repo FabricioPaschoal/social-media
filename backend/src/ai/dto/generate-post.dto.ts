@@ -22,7 +22,10 @@ export class GeneratePostDto {
   @IsOptional()
   tone?: string;
 
-  @ApiPropertyOptional({ example: 'image', enum: ['image', 'video', 'carousel', 'text'] })
+  @ApiPropertyOptional({
+    example: 'image',
+    enum: ['image', 'video', 'carousel', 'text'],
+  })
   @IsString()
   @IsOptional()
   mediaType?: string;

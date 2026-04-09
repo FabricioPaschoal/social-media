@@ -27,7 +27,10 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Put('me')
-  async updateProfile(@Request() req: any, @Body() updateUserDto: UpdateUserDto) {
+  async updateProfile(
+    @Request() req: any,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
     const user = await this.usersService.update(req.user.userId, updateUserDto);
     return {
       id: user._id,

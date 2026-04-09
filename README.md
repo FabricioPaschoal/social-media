@@ -45,6 +45,9 @@ social-media-saas/
 | AI        | OpenAI GPT-4o                     |
 | Social    | Facebook Graph API, Instagram Graph API |
 | Scheduler | @nestjs/schedule (Cron)           |
+| i18n (FE) | next-intl v4                      |
+| i18n (BE) | nestjs-i18n                       |
+| Testing   | Jest, React Testing Library, Supertest |
 
 ## Prerequisites
 
@@ -185,6 +188,91 @@ Brand: {brandName}
 
 Returns JSON with: caption, hashtags[], imagePrompt, title, category, emojis[], variations[]
 ```
+
+## Internationalization (i18n)
+
+The platform supports multiple languages (English and Portuguese).
+
+### Frontend (next-intl)
+
+Translation files are located in `frontend/messages/`:
+- `en.json` - English translations
+- `pt.json` - Portuguese translations
+
+**How language detection works:**
+1. Checks for `locale` cookie
+2. Falls back to `Accept-Language` header
+3. Defaults to `en`
+
+**Switching languages:** Use the language switcher dropdown in the navbar or auth pages.
+
+**Adding a new language:**
+1. Create a new translation file: `frontend/messages/{locale}.json`
+2. Copy the structure from `en.json` and translate all values
+3. Add the locale to the `locales` array in `frontend/src/components/layout/LanguageSwitcher.tsx`
+
+**Using translations in components:**
+```tsx
+import { useTranslations } from 'next-intl';
+
+export default function MyComponent() {
+  const t = useTranslations('namespace');
+  return <h1>{t('key')}</h1>;
+}
+```
+
+### Backend (nestjs-i18n)
+
+Translation files are in `backend/src/i18n/`:
+- `en/common.json` - English
+- `pt/common.json` - Portuguese
+
+**Using translations in services:**
+```typescript
+import { I18nService } from 'nestjs-i18n';
+
+this.i18n.t('common.auth.invalidCredentials');
+```
+
+## Running Tests
+
+### Backend Tests
+
+```bash
+cd backend
+
+# Run unit tests
+npm test
+
+# Run e2e tests (requires MongoDB)
+npm run test:e2e
+
+# Run tests with coverage
+npm run test:cov
+```
+
+### Frontend Tests
+
+```bash
+cd frontend
+
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:cov
+```
+
+### Test Summary
+
+| Area | Framework | Tests |
+|------|-----------|-------|
+| Backend unit | Jest | 46 tests (auth, users, posts, AI, social accounts) |
+| Backend e2e | Jest + Supertest | 8 tests (auth endpoints) |
+| Frontend components | Jest + React Testing Library | 33 tests (pages, components, translations) |
 
 ## Database Schemas
 

@@ -10,6 +10,7 @@ import { Post, PostDocument } from './schemas/post.schema';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { SocialAccountsService } from '../social-accounts/social-accounts.service';
+import { I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class PostsService {
@@ -18,6 +19,7 @@ export class PostsService {
   constructor(
     @InjectModel(Post.name) private postModel: Model<PostDocument>,
     private socialAccountsService: SocialAccountsService,
+    private readonly i18n: I18nService,
   ) {}
 
   async create(
@@ -49,7 +51,9 @@ export class PostsService {
     if (createPostDto.publishMode === 'schedule' && createPostDto.scheduledAt) {
       const scheduledDate = new Date(createPostDto.scheduledAt);
       if (scheduledDate <= new Date()) {
-        throw new BadRequestException('Scheduled time must be in the future');
+        throw new BadRequestException(
+          this.i18n.t('common.posts.invalidStatus'),
+        );
       }
       postData.status = 'scheduled';
       postData.scheduledAt = scheduledDate;
@@ -103,10 +107,13 @@ export class PostsService {
         _id: postId,
         userId: new Types.ObjectId(userId),
       })
-      .populate('socialAccountId', 'platform platformUsername pageName pageId igUserId');
+      .populate(
+        'socialAccountId',
+        'platform platformUsername pageName pageId igUserId',
+      );
 
     if (!post) {
-      throw new NotFoundException('Post not found');
+      throw new NotFoundException(this.i18n.t('common.posts.notFound'));
     }
     return post;
   }
@@ -119,7 +126,7 @@ export class PostsService {
     const post = await this.findById(postId, userId);
 
     if (post.status === 'published' || post.status === 'publishing') {
-      throw new BadRequestException('Cannot edit a published or publishing post');
+      throw new BadRequestException(this.i18n.t('common.posts.invalidStatus'));
     }
 
     if (updatePostDto.socialAccountId) {
@@ -139,13 +146,11 @@ export class PostsService {
       updateData.scheduledAt = new Date(updatePostDto.scheduledAt);
     }
 
-    const updated = await this.postModel.findByIdAndUpdate(
-      postId,
-      updateData,
-      { new: true },
-    );
+    const updated = await this.postModel.findByIdAndUpdate(postId, updateData, {
+      new: true,
+    });
     if (!updated) {
-      throw new NotFoundException('Post not found');
+      throw new NotFoundException(this.i18n.t('common.posts.notFound'));
     }
     return updated;
   }
@@ -153,7 +158,7 @@ export class PostsService {
   async delete(postId: string, userId: string): Promise<void> {
     const post = await this.findById(postId, userId);
     if (post.status === 'publishing') {
-      throw new BadRequestException('Cannot delete a post that is being published');
+      throw new BadRequestException(this.i18n.t('common.posts.invalidStatus'));
     }
     await this.postModel.findByIdAndDelete(postId);
   }
@@ -164,22 +169,25 @@ export class PostsService {
       .populate('socialAccountId');
 
     if (!post) {
-      throw new NotFoundException('Post not found');
+      throw new NotFoundException(this.i18n.t('common.posts.notFound'));
     }
 
     const account = post.socialAccountId as any;
     if (!account) {
-      await this.updatePostStatus(postId, 'failed', 'No social account linked');
-      throw new BadRequestException('No social account linked to this post');
+      await this.updatePostStatus(
+        postId,
+        'failed',
+        this.i18n.t('common.posts.socialAccountRequired'),
+      );
+      throw new BadRequestException(
+        this.i18n.t('common.posts.socialAccountRequired'),
+      );
     }
 
     await this.postModel.findByIdAndUpdate(postId, { status: 'publishing' });
 
     try {
-      const fullCaption = this.buildFullCaption(
-        post.caption,
-        post.hashtags,
-      );
+      const fullCaption = this.buildFullCaption(post.caption, post.hashtags);
 
       let result: { id: string };
 
@@ -199,7 +207,7 @@ export class PostsService {
       ) {
         if (!post.imageUrl) {
           throw new BadRequestException(
-            'Instagram posts require an image URL',
+            this.i18n.t('common.posts.captionRequired'),
           );
         }
         result = await this.socialAccountsService.publishToInstagram(
@@ -224,7 +232,7 @@ export class PostsService {
         { new: true },
       );
       if (!publishedPost) {
-        throw new NotFoundException('Post not found after publishing');
+        throw new NotFoundException(this.i18n.t('common.posts.notFound'));
       }
       return publishedPost;
     } catch (error: any) {

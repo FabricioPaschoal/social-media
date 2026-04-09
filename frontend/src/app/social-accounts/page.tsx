@@ -10,22 +10,24 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import Card, { CardBody } from '@/components/ui/Card';
 import SocialAccountCard from '@/components/social/SocialAccountCard';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 
 function SocialAccountsContent() {
   const { user, loading: authLoading } = useAuth();
   const { accounts, loading, error, refresh, disconnect } = useSocialAccounts();
   const searchParams = useSearchParams();
   const [connecting, setConnecting] = useState(false);
+  const t = useTranslations('socialAccounts');
 
   useEffect(() => {
     const connected = searchParams.get('connected');
     const errorMsg = searchParams.get('error');
     if (connected === 'true') {
-      toast.success('Social account connected successfully!');
+      toast.success(t('connectSuccess'));
       refresh();
     }
     if (errorMsg) {
-      toast.error(`Connection failed: ${errorMsg}`);
+      toast.error(t('connectFailed', { error: errorMsg }));
     }
   }, [searchParams, refresh]);
 
@@ -37,18 +39,18 @@ function SocialAccountsContent() {
       const separator = url.includes('?') ? '&' : '?';
       window.location.href = `${url}${separator}state=${user?.id}`;
     } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Failed to get auth URL');
+      toast.error(err.response?.data?.message || t('authUrlFailed'));
       setConnecting(false);
     }
   };
 
   const handleDisconnect = async (accountId: string) => {
-    if (!confirm('Are you sure you want to disconnect this account?')) return;
+    if (!confirm(t('disconnectConfirm'))) return;
     try {
       await disconnect(accountId);
-      toast.success('Account disconnected');
+      toast.success(t('disconnectSuccess'));
     } catch (err: any) {
-      toast.error(err.response?.data?.message || 'Failed to disconnect');
+      toast.error(err.response?.data?.message || t('disconnectFailed'));
     }
   };
 
@@ -71,9 +73,9 @@ function SocialAccountsContent() {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Social Accounts</h1>
+            <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
             <p className="mt-1 text-gray-600">
-              Connect your social media accounts to start publishing.
+              {t('subtitle')}
             </p>
           </div>
         </div>
@@ -81,7 +83,7 @@ function SocialAccountsContent() {
         {/* Connect Buttons */}
         <Card className="mb-6">
           <CardBody>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Connect a New Account</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('connectNew')}</h2>
             <div className="flex flex-wrap gap-3">
               <button
                 onClick={handleConnectFacebook}
@@ -89,7 +91,7 @@ function SocialAccountsContent() {
                 className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 transition"
               >
                 <span className="mr-2 font-bold">f</span>
-                {connecting ? 'Connecting...' : 'Connect Facebook'}
+                {connecting ? t('connecting') : t('connectFacebook')}
               </button>
               <button
                 onClick={handleConnectFacebook}
@@ -97,12 +99,11 @@ function SocialAccountsContent() {
                 className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-medium hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 transition"
               >
                 <span className="mr-2 font-bold">IG</span>
-                {connecting ? 'Connecting...' : 'Connect Instagram'}
+                {connecting ? t('connecting') : t('connectInstagram')}
               </button>
             </div>
             <p className="mt-3 text-xs text-gray-500">
-              Instagram requires a Facebook Business Page with a linked Instagram Business/Creator account.
-              Both are connected through Facebook Login.
+              {t('instagramNote')}
             </p>
           </CardBody>
         </Card>
@@ -114,7 +115,7 @@ function SocialAccountsContent() {
         )}
 
         {/* Connected Accounts */}
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Connected Accounts</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('connectedAccounts')}</h2>
         {loading ? (
           <LoadingSpinner size="lg" />
         ) : accounts.length > 0 ? (
@@ -131,7 +132,7 @@ function SocialAccountsContent() {
           <Card>
             <CardBody className="text-center py-12">
               <p className="text-gray-500">
-                No accounts connected yet. Connect your Facebook or Instagram account to get started.
+                {t('noAccounts')}
               </p>
             </CardBody>
           </Card>
